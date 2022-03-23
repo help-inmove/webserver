@@ -2,6 +2,8 @@ use actix::{Actor, StreamHandler};
 use actix_cors::Cors;
 use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
 use actix_web_actors::ws;
+use dotenv;
+use std::env;
 
 /// Define HTTP actor
 struct MyWs;
@@ -30,12 +32,16 @@ async fn index(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, E
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
+    let host = env::var("HOST").expect("Host not set");
+    let port = env::var("PORT").expect("Port not set");
+
     HttpServer::new(move || {
         App::new()
             .wrap(Cors::permissive())
             .route("/ws/", web::get().to(index))
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(format!("{}:{}", host, port))?
     .run()
     .await
 }
