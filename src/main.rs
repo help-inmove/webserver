@@ -2,7 +2,7 @@ use actix::{Actor, StreamHandler};
 use actix_cors::Cors;
 use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
 use actix_web_actors::ws;
-use dotenv;
+use dotenv::dotenv;
 use std::env;
 
 /// Define HTTP actor
